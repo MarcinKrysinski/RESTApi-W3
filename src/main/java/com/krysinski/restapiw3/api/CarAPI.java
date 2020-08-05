@@ -10,7 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -26,27 +26,42 @@ public class CarAPI {
         this.carService = carService;
     }
 
+
+    private Link addLink(Long id){
+        return linkTo(CarAPI.class).slash(id).withSelfRel();
+    }
+
     @GetMapping
-    public ResponseEntity<List<Car>> getCars() {
-        return new ResponseEntity<>(carService.getAllCars(), HttpStatus.OK);
+    public ResponseEntity<CollectionModel<Car>> getCars() {
+        List<Car> allCars = carService.getAllCars();
+        allCars.forEach(car -> car.add(addLink(car.getId()).withSelfRel()));
+        Link link = linkTo(CarAPI.class).withSelfRel();
+        CollectionModel<Car> carCollectionModel = new CollectionModel<>(allCars, link);
+        return new ResponseEntity<>(carCollectionModel, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Car> getCarById(@PathVariable Long id) {
+    public ResponseEntity<EntityModel<Car>> getCarById(@PathVariable Long id) {
+        Link link = addLink(id);
         Optional<Car> carById = carService.getCarById(id);
         if (carById.isPresent()) {
-            return new ResponseEntity<>(carById.get(), HttpStatus.OK);
+            EntityModel<Car> carEntityModel = new EntityModel<>(carById.get(), link);
+            return new ResponseEntity<>(carEntityModel, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/color/{color}")
-    public ResponseEntity<List<Car>> getCarsByColor(@PathVariable String color) {
+    public ResponseEntity<CollectionModel<Car>> getCarsByColor(@PathVariable String color) {
         List<Car> carsByColor = carService.getCarsByColor(color);
         if (carsByColor.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(carsByColor, HttpStatus.OK);
+        carsByColor.forEach(car -> car.add(addLink(car.getId()).withSelfRel()));
+        carsByColor.forEach(car -> car.add(linkTo(CarAPI.class).withRel("allColors")));
+        Link link = linkTo(CarAPI.class).withSelfRel();
+        CollectionModel<Car> carCollectionModel = new CollectionModel<>(carsByColor, link);
+        return new ResponseEntity<>(carCollectionModel, HttpStatus.OK);
     }
 
     @PostMapping
