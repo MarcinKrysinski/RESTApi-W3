@@ -1,10 +1,10 @@
 package com.krysinski.restapiw3.model;
 
 import com.krysinski.restapiw3.model.parse.ColorParser;
+import org.springframework.hateoas.RepresentationModel;
 
 
-
-public class Car {
+public class Car extends RepresentationModel {
 
     Long id;
     String mark;

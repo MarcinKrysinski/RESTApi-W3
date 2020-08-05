@@ -32,10 +32,12 @@ public class CarAPI {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Car> getCarById(@PathVariable Long id) {
+    public ResponseEntity<EntityModel<Car>> getCarById(@PathVariable Long id) {
+        Link link = linkTo(CarAPI.class).slash(id).withSelfRel();
         Optional<Car> carById = carService.getCarById(id);
         if (carById.isPresent()) {
-            return new ResponseEntity<>(carById.get(), HttpStatus.OK);
+            EntityModel<Car> carEntityModel = new EntityModel<>(carById.get(), link);
+            return new ResponseEntity<>(carEntityModel, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
