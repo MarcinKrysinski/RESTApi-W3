@@ -1,17 +1,24 @@
 package com.krysinski.restapiw3.model;
 
+import com.krysinski.restapiw3.model.parse.ColorParser;
+
+
+
 public class Car {
 
     Long id;
     String mark;
     String model;
-    Colors color;
+    Color color;
 
-    public Car(Long id, String mark, String model, Colors color) {
+    public Car(Long id, String mark, String model, Color color) {
         this.id = id;
         this.mark = mark;
         this.model = model;
         this.color = color;
+    }
+
+    public Car() {
     }
 
     public Long getId() {
@@ -38,12 +45,12 @@ public class Car {
         this.model = model;
     }
 
-    public Colors getColor() {
+    public Color getColor() {
         return color;
     }
 
-    public void setColor(Colors color) {
-        this.color = color;
+    public void setColor(String color) {
+        this.color = ColorParser.convertStringToColor(color);
     }
 
     @Override

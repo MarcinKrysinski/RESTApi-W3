@@ -1,24 +1,24 @@
 package com.krysinski.restapiw3.model.parse;
 
-import com.krysinski.restapiw3.model.Colors;
+import com.krysinski.restapiw3.model.Color;
 
 public class ColorParser {
 
-    public static Colors convertStringToColor(String string){
+    public static Color convertStringToColor(String string){
         String color = string.toUpperCase();
 
         if (color.equals("BLACK")){
-            return Colors.BLACK;
+            return Color.BLACK;
         }else if (color.equals("WHITE")){
-            return Colors.WHITE;
+            return Color.WHITE;
         }else if (color.equals("RED")){
-            return Colors.RED;
+            return Color.RED;
         }else if (color.equals("GREEN")){
-            return Colors.GREEN;
+            return Color.GREEN;
         }else if (color.equals("BLUE")) {
-            return Colors.BLUE;
+            return Color.BLUE;
         }else if (color.equals("YELLOW")){
-            return Colors.YELLOW;
+            return Color.YELLOW;
         }
         return null;
     }
