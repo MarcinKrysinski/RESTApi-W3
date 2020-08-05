@@ -4,7 +4,7 @@ import com.krysinski.restapiw3.model.parse.ColorParser;
 import org.springframework.hateoas.RepresentationModel;
 
 
-public class Car extends RepresentationModel {
+public class Car extends RepresentationModel<Car> {
 
     Long id;
     String mark;
